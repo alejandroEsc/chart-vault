@@ -10,7 +10,6 @@ data:
     {{- end}}
 
     {{- if eq .Values.Vault.Backend.Type "consul" }}
-
       backend "consul"
       {
           address = {{ .Values.Vault.Backend.Address | quote }}
@@ -21,9 +20,7 @@ data:
       {{- end }}
           token = {{ .Values.Vault.Backend.Token | quote }}
       }
-
     {{- else if eq .Values.Vault.Backend.Type "etcd" }}
-
       backend "etcd"
       {
       {{- if .Values.Vault.Backend.Discovery_srv }}
@@ -59,7 +56,6 @@ data:
           username = {{ default "" .Values.Vault.Backend.Username | quote }}
           password = {{ default "" .Values.Vault.Backend.Password | quote }}
       }
-
     {{- end }}
 
       listener "tcp" {

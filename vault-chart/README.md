@@ -44,6 +44,57 @@ helmConfigs:
 
 Get [K2](https://github.com/samsung-cnct/k2) to help you deploy a Kubernetes cluster.
 
+
+## Configuration
+
+| Parameter                    | Description                                                       | Default                    |
+| -----------------------------| ----------------------------------------------------------------- | -------------------------- |
+| Vault.Image                  | Vault docker image to use.                                        | "quay.io/samsung_cnct/vault" |    
+| Vault.ImageTag               | Version of vault image.                                           | "0.8.3"                      |
+| Vault.ImagePullPolicy        | Pull policy for the docker image.                                 | "Always"                     |
+| Vault.Component              | Name to use for the component.                                    | "vault"                      |
+| Vault.NodePort               |                                                                   | 32443                        |
+| Vault.Replicas               | Number of vault instances to use.                                 | 1                            |
+| Vault.Cpu                    |                                                                   | "512m"                       |
+| Vault.Memory                 |                                                                   | "200mi"                      |
+
+### etcd Backend
+Etcd params used from [here](https://www.vaultproject.io/docs/configuration/storage/etcd.html)
+
+A few facts:
+- do not specify protocol as it is defined by definition of Tls.
+- ha_enabled is automatically set to true if replicas is > 1 and the backend supports it.
+
+
+| Parameter                    | Description                                                                                         | Default              |
+| -----------------------------| ----------------------------------------------------------------------------------------------------| -------------------- |
+| Backend.Type                 | Type of backend supporting vault                                                                    | "etcd"               |    
+| Backend.Address              | IP address of the backened                                                                          | "etcd-vault-etcd"    |    
+| Backend.Port                 | etcd client port to use                                                                             | 3379                 |    
+| Backend.EtcdApi              | API version of etcd. Highly recommend using v3                                                      | "v3"                 |    
+| Backend.Path                 | Path to store vault data.                                                                           | "vault/"             |    
+| Backend.Sync                 | Specifies whether to sync the list of available Etcd services on startup                            | "true"               |    
+| Backend.Username             | Specifies the username to use when authenticating with the etcd server                              | ""                   |    
+| Backend.Password             | Specifies the password to use when authenticating with the etcd server                              | ""                   |    
+| Backend.Scheme               | Required for consul backend, ignored by etcd.                                                       | "http"               |    
+| Backend.Token                | Used for consul but ignored by etcd so no need to remove.                                           | "token"              |    
+| Backend.RedirectAddr         | the address (full URL) to advertise to other Vault servers in the cluster for client redirection    | ""                   |    
+| Backend.ClusterAddress       | the address to advertise to other Vault servers in the cluster for request forwarding               | ""                   |    
+| Backend.DisableClustering    | whether clustering features such as request forwarding are enabled.                                 | "false"              |    
+
+
+
+### Consul Backend
+
+| Parameter             | Description                                                          | Default                 |
+| ----------------------| -------------------------------------------------------------------- | ----------------------- |
+| Backend.Type          | Type of backend supporting vault.                                    | "consul"                |    
+| Backend.Address       | IP address of the backend.                                           |                         |    
+| Backend.Token         | Token to use with backend.                                           | "token"                 |    
+
+ 
+
+
 ## Assets
 Kubernetes Asset in the chart.
 

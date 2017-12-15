@@ -6,7 +6,6 @@ metadata:
   labels:
     app: {{ template "vault.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: "{{ .Release.Name }}-{{ .Values.vault.component }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
@@ -24,20 +23,31 @@ spec:
         nodepool: clusterNodes
       containers:
       {{ include "containerVault" . | indent 6 }}
+      volumeMounts:
+      {{- if .Values.vault.tls.enabled }}
+      - name: vault-tls
+        mountPath: {{ .Values.vault.tls.secret.mountPath }}
+        readOnly: true
+      {{- end }}
+      {{- if .Values.vault.etcdBackend.tls.enabled }}
+      - name: etcd-tls
+        mountPath: {{ .Values.vault.etcdBackend.tls.secret.mountPath }}
+        readOnly: true
+      {{- end }}
       volumes:
       - name: config
         configMap:
           name: {{ template "vault.fullname" . }}-run
-{{- if .Values.vault.tls.enabled }}
-      - name: vaulttls
+      {{- if .Values.vault.tls.enabled }}
+      - name: vault-tls
         secret:
           secretName: {{ .Values.vault.tls.secret.name }}
-{{- end }}
-{{- if .Values.vault.etcdBackend.tls.enabled }}
-      - name: etcdtls
+      {{- end }}
+      {{- if .Values.vault.etcdBackend.tls.enabled }}
+      - name: etcd-tls
         secret:
           secretName: {{ .Values.vault.etcdBackend.tls.secret.name }}
-{{- end }}
+      {{- end }}
 {{- if .Values.vault.tolerations }}
       tolerations:
       {{- range .Values.vault.tolerations }}

@@ -45,7 +45,7 @@ vault:
     enabled: false
     secret:
       name:
-      mountPath:
+      mountPath: /etc/vault/tls
       certFile:
       keyFile:
       caFile:
